@@ -1,0 +1,52 @@
+---
+title: "Taller de bookdown"
+subtitle: "Reunión de usuarios de R (ITAM, 2018)"
+author: "Felipe González"
+date: "2/13/2018"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Bookdown
+
+- [Bookdown](https://cran.rstudio.com/web/packages/bookdown/index.html) es un paquete de R que hace más fácil escribir libros, notas de clase, o reportes técnicos largos.
+
+- Bookdown está construido encima de [rmarkdown](http://rmarkdown.rstudio.com). Añade características
+como referencias, referencias cruzadas para ecuaciones, figuras, tablas, etc. que son útiles para documentos más largos que reportes simples.
+
+- Sus ventajas son la conveniencia de escribir el contenido en markdown (que es fácil de usar), mútiples tipos de salida (HTML, PDF, Word, etc), gráficas y tablas interactivas.
+
+## Referencias importantes
+
+El libro de bookdown de Yihui Xie acerca de bookdown es la referencia
+más importante <https://bookdown.org/yihui/bookdown/>. La mayor parte
+del contenido de esta plática está en esta referencia.
+
+
+## Caso: preparar y distribuir notas de clase
+
+Dificultades:
+
+- Mantenimiento de notas 
+- Separación de notas de teoría, ejemplos, aplicaciones
+- Acceso fácil a notas, resultados y código
+- Reproducibilidad
+
+<!---
+- Mantener al día las notas (corregir typos ;) por ejemplo) es trabajoso, y notificar de los cambios no muy claro.
+- Tener partes separadas (notas de teoría, ejemplos, aplicaciones) hace más dificíl estudiar las notas y conectar los conceptos (?)
+- La idea es que los estudiantes puedan acceder al código y notas completas de manera fácil, y puedan derivar de ahí su trabajo.
+- Reproducibilidad: En muchos casos, reproducir los resultados de código o ejemplos puede ser difícil para los estudiantes. Unas notas con todo el material junto les permite ver al menos qué resultados deberían obtener.
+--->
+
+## Temas 
+
+- Cómo hacer un reporte o libro con bookdown (local)
+- Cómo compartir fácilmente los resultados (por ejemplo, en Netlify)
+- Cómo mantener y compartir el código de las notas (Github)
+- Cómo automatizar la construcción, pruebas y distribución de notas (TravisCI)
+
+
