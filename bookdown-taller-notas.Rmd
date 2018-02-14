@@ -44,9 +44,76 @@ Dificultades:
 
 ## Temas 
 
-- Cómo hacer un reporte o libro con bookdown (local)
-- Cómo compartir fácilmente los resultados (por ejemplo, en Netlify)
-- Cómo mantener y compartir el código de las notas (Github)
+- Cómo hacer un reporte o libro con bookdown y compartirlo de manera fácil
+- Cómo mantener y compartir el código de las notas (Github, Github pages)
 - Cómo automatizar la construcción, pruebas y distribución de notas (TravisCI)
 
+
+<!--- ver primero un demo general, y luego parte por parte
+enseñar aprendizaje máquina, y luego interactivos del
+curso de métodos analíticos --->
+
+<!--- Ahora explicar los básicos de markdown --->
+<!-- hacer uno rápido -->
+<!-- de los primeros, hacer a mano en línea de comandos 
+bookdown::render_book("index.Rmd", "bookdown::gitbook")
+
+Agregar:
+site: bookdown::bookdown_site
+output:
+  bookdown::gitbook: default
+
+y también:
+
+  bookdown::gitbook: 
+    config:
+      sharing: no  
+  
+-->
+
+## _bookdown.yaml
+
+Aquí podemos configurar más aspectos en este archivo:
+
+```
+before_chapter_script: ["script1.R", "script2.R"]
+after_chapter_script: "script3.R"
+language:
+  label:
+    fig: "Figura "
+    tab: "Tabla "
+  ui:
+    chapter_name: "Clase "
+new_session: yes
+```
+
+## Referencias cruzadas
+
+- Para matemáticas: (\#eq:label) para etiquetar  y \@ref(eq:label) para referir
+
+- Para tablas: la manera más simple es usar knitr::kable, si el chunk se llama mi-tabla, entonces la referencia es \@ref(tab:mi-tabla)
+
+-  Para figuras: si usamos la opción fig.cap = "Descripción" en el chunk con nombre label, nos referimos con  \@ref(fig:label). Usar también fig.align = "center" es útil
+
+- Para secciones: usar también \@ref(label) donde label es el identificador de la sección (se puede usar {#label} después del
+nombre de la sección para escoger la etiqueta).
+
+- Interactivos se pueden etiquetar como gráficas.
+
+## Referencias
+
+Usar un archivo book.bib (referencias tipo bibtex),
+añadir al yaml del primer archivo 
+```
+bibliography: ["book.bib"]
+link-citations: true
+```
+y referir con [@label]
+
+## Compartir código
+
+Una manera es compartir en ftp, dropbox, etc. todos los archivos. Usar Github es una mejor solución por varias razones. En nuestro caso:
+
+- Los estudiantes pueden ver cambios en las notas (nuevas secciones, nuevas instrucciones, correcciones, etc.)
+- Podemos ligar a otros servicios que se encarguen de actualizar automáticamente las notas cuando subimos cambios al repositorio de código.u
 
