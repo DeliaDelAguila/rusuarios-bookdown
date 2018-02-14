@@ -3123,6 +3123,10 @@ if (document.readyState !== "loading" &&
 
 <p>El libro de bookdown de Yihui Xie acerca de bookdown es la referencia más importante <a href='https://bookdown.org/yihui/bookdown/' title=''>https://bookdown.org/yihui/bookdown/</a>. La mayor parte del contenido de esta plática está en esta referencia.</p>
 
+<p>Esta referencia también útil (aunque algunas cosas han cambiado desde su publicación): <a href='https://juliasilge.com/blog/beginners-guide-to-travis/' title=''>https://juliasilge.com/blog/beginners-guide-to-travis/</a></p>
+
+<p>Ver la configuración de otros paquetes de R en github también ayuda (por ejemplo <a href='https://github.com/juliasilge/janeaustenr/' title=''>https://github.com/juliasilge/janeaustenr/</a>)</p>
+
 </article></slide><slide class=""><hgroup><h2>Caso: preparar y distribuir notas de clase</h2></hgroup><article  id="caso-preparar-y-distribuir-notas-de-clase">
 
 <p>Dificultades:</p>
@@ -3187,7 +3191,86 @@ language:
     chapter_name: &quot;Clase &quot;
 new_session: yes</pre>
 
-</article></slide><slide class=""><hgroup><h2>Referencias</h2></hgroup><article  id="referencias"></article></slide>
+</article></slide><slide class=""><hgroup><h2>Referencias cruzadas</h2></hgroup><article  id="referencias-cruzadas">
+
+<ul>
+<li><p>Para matemáticas: (#eq:label) para etiquetar y @ref(eq:label) para referir</p></li>
+<li><p>Para tablas: la manera más simple es usar knitr::kable, si el chunk se llama mi-tabla, entonces la referencia es @ref(tab:mi-tabla)</p></li>
+<li><p>Para figuras: si usamos la opción fig.cap = &ldquo;Descripción&rdquo; en el chunk con nombre label, nos referimos con @ref(fig:label). Usar también fig.align = &ldquo;center&rdquo; es útil</p></li>
+<li><p>Para secciones: usar también @ref(label) donde label es el identificador de la sección (se puede usar {#label} después del nombre de la sección para escoger la etiqueta).</p></li>
+<li><p>Interactivos se pueden etiquetar como gráficas.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Referencias</h2></hgroup><article  id="referencias">
+
+<p>Usar un archivo book.bib (referencias tipo bibtex), añadir al yaml del primer archivo</p>
+
+<pre >bibliography: [&quot;book.bib&quot;]
+link-citations: true</pre>
+
+<p>y referir con <span class="cite">[@label]</span></p>
+
+</article></slide><slide class=""><hgroup><h2>Algo de automatización</h2></hgroup><article  id="algo-de-automatizacion">
+
+<ul>
+<li><p>Hacer scripts build.sh y deploy.sh, por ejemplo, para construir las notas y subirlas a nuestro sitio.</p></li>
+<li><p>Por ejemplo, si usamos netlify, existen herramientas de línea de comandos para actualizar nuestro sitio <a href='https://www.netlify.com/docs/cli/' title=''>https://www.netlify.com/docs/cli/</a></p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Compartir código</h2></hgroup><article  id="compartir-codigo">
+
+<p>Una manera es compartir en ftp, dropbox, etc. todos los archivos. Usar Github es una mejor solución por varias razones. En nuestro caso:</p>
+
+<ul>
+<li>Los estudiantes pueden ver cambios en las notas (nuevas secciones, nuevas instrucciones, correcciones, etc.)</li>
+<li>Podemos ligar a otros servicios que se encarguen de actualizar automáticamente las notas cuando subimos cambios al repositorio de código.</li>
+<li>En algunos casos, los estudiantes contribuyen correcciones a las notas!</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Una manera de hacer esto</h2></hgroup><article  id="una-manera-de-hacer-esto">
+
+<p>(Se requiere tener instalado git, una cuenta de github, y configuración para poder hacer cambios a nuestros repositorios)</p>
+
+<ul>
+<li>Hacer un nuevo repositorio en Github. Copiar la liga del repositorio</li>
+<li>Nuevo proyecto en Rstudio -&gt; Version control. Copiar en repository URL la liga del repositorio.</li>
+<li>Agregar archivos, hacer commit y push al nuevo repositorio.</li>
+</ul>
+
+<p>Si trabajamos manualmente, podemos hacer cambios al repositorio, compilar localmente las notas y subir el contenido de _book a donde sea que estemos compartiendo.</p>
+
+</article></slide><slide class=""><hgroup><h2>Travis CI y Github pages</h2></hgroup><article  id="travis-ci-y-github-pages">
+
+<p>Otra manera de distribuir notas y código, y automatizar la construcción de las notas es utilizar algún servicio de integración continua como TravisCI.</p>
+
+<ul>
+<li><p>El soporte para R en TravisCI está diseñado principalmente para desarrollo y prueba de paquetes, pero se puede usar también para compilar y distribuir bookdown.</p></li>
+<li><p>Como en los paquetes agregamos un archivo con DESCRIPTION</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Archivos .travis.yml, build y deploy</h2></hgroup><article  id="archivos-.travis.yml-build-y-deploy">
+
+<p>Crear instrucciones para que travis pueda construir nuestro libro y ponerlo en el lugar correcto.</p>
+
+</article></slide><slide class=""><hgroup><h2>Configuración gh-pages</h2></hgroup><article  id="configuracion-gh-pages">
+
+<ul>
+<li>Crear una rama del repositorio que se llame gh-pages, en blanco:</li>
+</ul>
+
+<pre >git checkout --orphan gh-pages
+git rm -rf .
+touch .nojekyll
+git add .nojekyll
+git commit -m &quot;Commit inicial&quot;
+git push origin gh-pages</pre>
+
+</article></slide><slide class=""><hgroup><h2>Token de acceso en Github</h2></hgroup><article  id="token-de-acceso-en-github">
+
+<ul>
+<li><p>Para que Travis pueda subir el libro compilado, necesitamos un access token de Github (En Github, Settings-&gt;Developer settings -&gt; Personal access token). Generar el token y copiarlo</p></li>
+<li><p>En Travis, seleccionar activar nuestro repositorio. En settings agregar la variable GITHUB_PAT con el token que obtuvimos.</p></li>
+</ul></article></slide>
 
 
   <slide class="backdrop"></slide>

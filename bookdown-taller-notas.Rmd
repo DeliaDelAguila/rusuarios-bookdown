@@ -25,6 +25,10 @@ El libro de bookdown de Yihui Xie acerca de bookdown es la referencia
 más importante <https://bookdown.org/yihui/bookdown/>. La mayor parte
 del contenido de esta plática está en esta referencia.
 
+Esta referencia también útil (aunque algunas cosas han cambiado
+desde su publicación): <https://juliasilge.com/blog/beginners-guide-to-travis/>
+
+Ver la configuración de otros paquetes de R en github también ayuda (por ejemplo <https://github.com/juliasilge/janeaustenr/>)
 
 ## Caso: preparar y distribuir notas de clase
 
@@ -110,10 +114,69 @@ link-citations: true
 ```
 y referir con [@label]
 
+## Algo de automatización
+
+- Hacer scripts build.sh y deploy.sh, por ejemplo, para construir
+las notas y subirlas a nuestro sitio. 
+
+- Por ejemplo, si usamos netlify, existen herramientas de línea
+de comandos para actualizar nuestro sitio <https://www.netlify.com/docs/cli/>
+
 ## Compartir código
 
 Una manera es compartir en ftp, dropbox, etc. todos los archivos. Usar Github es una mejor solución por varias razones. En nuestro caso:
 
 - Los estudiantes pueden ver cambios en las notas (nuevas secciones, nuevas instrucciones, correcciones, etc.)
-- Podemos ligar a otros servicios que se encarguen de actualizar automáticamente las notas cuando subimos cambios al repositorio de código.u
+- Podemos ligar a otros servicios que se encarguen de actualizar automáticamente las notas cuando subimos cambios al repositorio de código.
+- En algunos casos, los estudiantes contribuyen correcciones a las notas!
+
+## Una manera de hacer esto
+
+(Se requiere tener instalado git, una cuenta de github, y configuración para poder hacer cambios a nuestros repositorios)
+
+- Hacer un nuevo repositorio en Github. Copiar la liga del repositorio
+- Nuevo proyecto en Rstudio -> Version control. Copiar en repository
+URL la liga del repositorio.
+- Agregar archivos, hacer commit y push al nuevo repositorio. 
+
+Si trabajamos manualmente, podemos hacer cambios al repositorio, compilar localmente las notas y subir el contenido de _book a donde sea que estemos compartiendo.
+
+## Travis CI y Github pages
+
+Otra manera de distribuir notas y código, y automatizar la construcción de las notas es utilizar algún servicio 
+de integración continua como TravisCI.
+
+- El soporte para R en TravisCI está diseñado principalmente
+para desarrollo y prueba de paquetes, pero se puede usar también
+para compilar y distribuir bookdown.
+
+- Como en los paquetes agregamos un archivo con DESCRIPTION
+
+## Archivos .travis.yml, build y deploy
+
+Crear instrucciones para que travis pueda construir nuestro
+libro y ponerlo en el lugar correcto.
+
+
+## Configuración gh-pages
+
+- Crear una rama del repositorio que se llame gh-pages, en blanco:
+
+```
+git checkout --orphan gh-pages
+git rm -rf .
+touch .nojekyll
+git add .nojekyll
+git commit -m "Commit inicial"
+git push origin gh-pages
+```
+
+## Token de acceso en Github
+
+- Para que Travis pueda subir el libro compilado, necesitamos un
+access token de Github (En Github, Settings->Developer settings -> Personal access token). Generar el token y copiarlo
+
+- En Travis, seleccionar activar nuestro repositorio. En settings
+agregar la variable GITHUB_PAT con el token que obtuvimos.
+
 
