@@ -19,25 +19,27 @@ como referencias, referencias cruzadas para ecuaciones, figuras, tablas, etc. qu
 
 - Sus ventajas son la conveniencia de escribir el contenido en markdown (que es fácil de usar), mútiples tipos de salida (HTML, PDF, Word, etc), gráficas y tablas interactivas.
 
-## Referencias importantes
+## Referencia
 
-El libro de bookdown de Yihui Xie acerca de bookdown es la referencia
+- El libro de bookdown de Yihui Xie acerca de bookdown es la referencia
 más importante <https://bookdown.org/yihui/bookdown/>. La mayor parte
 del contenido de esta plática está en esta referencia.
 
-Esta referencia también útil (aunque algunas cosas han cambiado
-desde su publicación): <https://juliasilge.com/blog/beginners-guide-to-travis/>
+- Para la parte de integración Github/TravisCI, ver
+por ejemplo <https://docs.travis-ci.com/user/languages/r/>,
+o la configuración de otros paquetes en R en github
+(por ejemplo <https://github.com/juliasilge/janeaustenr/>)
 
-Ver la configuración de otros paquetes de R en github también ayuda (por ejemplo <https://github.com/juliasilge/janeaustenr/>)
 
 ## Caso: preparar y distribuir notas de clase
 
 Dificultades:
 
 - Mantenimiento de notas 
-- Separación de notas de teoría, ejemplos, aplicaciones
 - Acceso fácil a notas, resultados y código
 - Reproducibilidad
+- Separación de notas de teoría, ejemplos, aplicaciones
+
 
 <!---
 - Mantener al día las notas (corregir typos ;) por ejemplo) es trabajoso, y notificar de los cambios no muy claro.
@@ -45,39 +47,51 @@ Dificultades:
 - La idea es que los estudiantes puedan acceder al código y notas completas de manera fácil, y puedan derivar de ahí su trabajo.
 - Reproducibilidad: En muchos casos, reproducir los resultados de código o ejemplos puede ser difícil para los estudiantes. Unas notas con todo el material junto les permite ver al menos qué resultados deberían obtener.
 --->
+## Ejemplos
+
+
 
 ## Temas 
 
-- Cómo hacer un reporte o libro con bookdown y compartirlo de manera fácil
-- Cómo mantener y compartir el código de las notas (Github, Github pages)
-- Cómo automatizar la construcción, pruebas y distribución de notas (TravisCI)
+1. Cómo hacer un reporte o libro con bookdown y compartirlo de manera fácil
+2. Cómo mantener y compartir el código de las notas (Github, Github pages)
+3. Cómo automatizar la construcción, pruebas y distribución de notas (TravisCI)
 
 
-<!--- ver primero un demo general, y luego parte por parte
-enseñar aprendizaje máquina, y luego interactivos del
-curso de métodos analíticos --->
+## Comenzar un libro de bookdown
 
-<!--- Ahora explicar los básicos de markdown --->
-<!-- hacer uno rápido -->
-<!-- de los primeros, hacer a mano en línea de comandos 
+- El archivo inicial es index.Rmd
+- Agregamos archivos adicionales Rmd que son los capítulos (se procesan en orden alfabético, pero esto puede cambiarse)
+- Construimos el libro:
+```
 bookdown::render_book("index.Rmd", "bookdown::gitbook")
+```
 
-Agregar:
+## Más configuración
+
+Podemos agregar (en index.Rmd) (botón build de Rstudio):
+
+```
 site: bookdown::bookdown_site
 output:
   bookdown::gitbook: default
+  #bookdown::pdf_book: default
+```
+Y cambiamos algunas opciones, por ejemplo:
 
-y también:
-
+```
+site: bookdown::bookdown_site
+output:
   bookdown::gitbook: 
     config:
       sharing: no  
-  
--->
+```  
 
-## _bookdown.yaml
 
-Aquí podemos configurar más aspectos en este archivo:
+## _bookdown.yml
+
+Aquí podemos configurar más aspectos de cómo
+correr los Rmd y lenguaje:
 
 ```
 before_chapter_script: ["script1.R", "script2.R"]
@@ -91,32 +105,63 @@ language:
 new_session: yes
 ```
 
+## _output.yml
+
+Configuración de las salidas. Un ejemplo es:
+
+```
+bookdown::gitbook:
+  css: style.css
+  config:
+    edit: https://github.com/felipegonzalez/notas-ejemplo/edit/master/%s
+    download: ["pdf", "epub"]
+bookdown::pdf_book:
+  includes:
+    in_header: preamble.tex
+  latex_engine: xelatex
+  citation_package: natbib
+  keep_tex: yes
+bookdown::epub_book: default
+```
+## Distribución manual
+
+Por ejemplo, en algún servicio como netlify
+
+
 ## Referencias cruzadas
 
-- Para matemáticas: (\#eq:label) para etiquetar  y \@ref(eq:label) para referir
+- Para matemáticas: `(\#eq:label)` para etiquetar  y `\@ref(eq:label)` para referir
 
-- Para tablas: la manera más simple es usar knitr::kable, si el chunk se llama mi-tabla, entonces la referencia es \@ref(tab:mi-tabla)
+- Para tablas: la manera más simple es usar `knitr::kable` (con argumento `caption`). Si el chunk se llama `mi-tabla`, entonces la referencia es `\@ref(tab:mi-tabla)`
 
--  Para figuras: si usamos la opción fig.cap = "Descripción" en el chunk con nombre label, nos referimos con  \@ref(fig:label). Usar también fig.align = "center" es útil
+-  Para figuras: si usamos la opción `fig.cap` = "Descripción" en el chunk con nombre `label`, nos referimos con  `\@ref(fig:label)`. Usar también `fig.align = "center"` es útil
 
-- Para secciones: usar también \@ref(label) donde label es el identificador de la sección (se puede usar {#label} después del
+- Para secciones: usar también `\@ref(label)` donde `label` es el identificador de la sección (se puede usar `{#label}` después del
 nombre de la sección para escoger la etiqueta).
 
-- Interactivos se pueden etiquetar como gráficas.
+- Interactivos se pueden etiquetar como figuras.
 
 ## Referencias
 
-Usar un archivo book.bib (referencias tipo bibtex),
-añadir al yaml del primer archivo 
+Usar un archivo `book.bib` (referencias tipo bibtex),
+añadir al yaml del primer archivo (`index.Rmd`)
 ```
 bibliography: ["book.bib"]
 link-citations: true
 ```
 y referir con [@label]
 
+Para cambiar el título de las referencias
+(por default "References"), se puede agregar un capítulo al
+final con el contenido:
+
+```
+`r "\x60r if (knitr::is_html_output()) '# Referencias {-}'\x60"`
+```
+
 ## Algo de automatización
 
-- Hacer scripts build.sh y deploy.sh, por ejemplo, para construir
+- Hacer scripts `build.sh` y `deploy.sh`, por ejemplo, para construir
 las notas y subirlas a nuestro sitio. 
 
 - Por ejemplo, si usamos netlify, existen herramientas de línea
@@ -128,7 +173,7 @@ Una manera es compartir en ftp, dropbox, etc. todos los archivos. Usar Github es
 
 - Los estudiantes pueden ver cambios en las notas (nuevas secciones, nuevas instrucciones, correcciones, etc.)
 - Podemos ligar a otros servicios que se encarguen de actualizar automáticamente las notas cuando subimos cambios al repositorio de código.
-- En algunos casos, los estudiantes contribuyen correcciones a las notas!
+- En algunos casos, los estudiantes contribuyen correcciones a las notas de manera relativamente fácil.
 
 ## Una manera de hacer esto
 
@@ -139,7 +184,7 @@ Una manera es compartir en ftp, dropbox, etc. todos los archivos. Usar Github es
 URL la liga del repositorio.
 - Agregar archivos, hacer commit y push al nuevo repositorio. 
 
-Si trabajamos manualmente, podemos hacer cambios al repositorio, compilar localmente las notas y subir el contenido de _book a donde sea que estemos compartiendo.
+Si trabajamos manualmente, podemos hacer cambios al repositorio, compilar localmente las notas y subir el contenido de `_book` a donde sea que estemos compartiendo.
 
 ## Travis CI y Github pages
 
@@ -150,7 +195,7 @@ de integración continua como TravisCI.
 para desarrollo y prueba de paquetes, pero se puede usar también
 para compilar y distribuir bookdown.
 
-- Como en los paquetes agregamos un archivo con DESCRIPTION
+- Como en los paquetes agregamos un archivo DESCRIPTION, que debe incluir los paquetes que usamos en nuestro código.
 
 ## Archivos .travis.yml, build y deploy
 
@@ -179,4 +224,17 @@ access token de Github (En Github, Settings->Developer settings -> Personal acce
 - En Travis, seleccionar activar nuestro repositorio. En settings
 agregar la variable GITHUB_PAT con el token que obtuvimos.
 
+## Ventajas y desventajas de este flujo
+
+- Ventaja: después de hacer cambios, y probarlos, subimos al repositorio y todo se actualiza.
+
+- Ventaja: las notas siempre se compilan en un ambiente más fijo que mi máquina local (reproducibilidad). Los estudiantes pueden replicar este flujo de trabajo con sus propios repositorios
+
+- Desventaja: depende de cómo corramos las pruebas, puede ser que
+las notas no compilen en Travis, o que compilen con resultados diferentes a los que observamos localmente
+
+## Otros tipos de flujo
+
+- En este semestre, una combinación de Docker + github + netlify.
+El contenedor de Docker se recomienda a los estudiantes como su ambiente de trabajo. 
 

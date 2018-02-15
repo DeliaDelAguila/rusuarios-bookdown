@@ -3119,13 +3119,12 @@ if (document.readyState !== "loading" &&
 <li><p>Sus ventajas son la conveniencia de escribir el contenido en markdown (que es fácil de usar), mútiples tipos de salida (HTML, PDF, Word, etc), gráficas y tablas interactivas.</p></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Referencias importantes</h2></hgroup><article  id="referencias-importantes">
+</article></slide><slide class=""><hgroup><h2>Referencia</h2></hgroup><article  id="referencia">
 
-<p>El libro de bookdown de Yihui Xie acerca de bookdown es la referencia más importante <a href='https://bookdown.org/yihui/bookdown/' title=''>https://bookdown.org/yihui/bookdown/</a>. La mayor parte del contenido de esta plática está en esta referencia.</p>
-
-<p>Esta referencia también útil (aunque algunas cosas han cambiado desde su publicación): <a href='https://juliasilge.com/blog/beginners-guide-to-travis/' title=''>https://juliasilge.com/blog/beginners-guide-to-travis/</a></p>
-
-<p>Ver la configuración de otros paquetes de R en github también ayuda (por ejemplo <a href='https://github.com/juliasilge/janeaustenr/' title=''>https://github.com/juliasilge/janeaustenr/</a>)</p>
+<ul>
+<li><p>El libro de bookdown de Yihui Xie acerca de bookdown es la referencia más importante <a href='https://bookdown.org/yihui/bookdown/' title=''>https://bookdown.org/yihui/bookdown/</a>. La mayor parte del contenido de esta plática está en esta referencia.</p></li>
+<li><p>Para la parte de integración Github/TravisCI, ver por ejemplo <a href='https://docs.travis-ci.com/user/languages/r/' title=''>https://docs.travis-ci.com/user/languages/r/</a>, o la configuración de otros paquetes en R en github (por ejemplo <a href='https://github.com/juliasilge/janeaustenr/' title=''>https://github.com/juliasilge/janeaustenr/</a>)</p></li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Caso: preparar y distribuir notas de clase</h2></hgroup><article  id="caso-preparar-y-distribuir-notas-de-clase">
 
@@ -3133,9 +3132,9 @@ if (document.readyState !== "loading" &&
 
 <ul>
 <li>Mantenimiento de notas</li>
-<li>Separación de notas de teoría, ejemplos, aplicaciones</li>
 <li>Acceso fácil a notas, resultados y código</li>
 <li>Reproducibilidad</li>
+<li>Separación de notas de teoría, ejemplos, aplicaciones</li>
 </ul>
 
 <!---
@@ -3145,41 +3144,46 @@ if (document.readyState !== "loading" &&
 - Reproducibilidad: En muchos casos, reproducir los resultados de código o ejemplos puede ser difícil para los estudiantes. Unas notas con todo el material junto les permite ver al menos qué resultados deberían obtener.
 --->
 
+</article></slide><slide class=""><hgroup><h2>Ejemplos</h2></hgroup><article  id="ejemplos">
+
 </article></slide><slide class=""><hgroup><h2>Temas</h2></hgroup><article  id="temas">
 
-<ul>
+<ol>
 <li>Cómo hacer un reporte o libro con bookdown y compartirlo de manera fácil</li>
 <li>Cómo mantener y compartir el código de las notas (Github, Github pages)</li>
 <li>Cómo automatizar la construcción, pruebas y distribución de notas (TravisCI)</li>
+</ol>
+
+</article></slide><slide class=""><hgroup><h2>Comenzar un libro de bookdown</h2></hgroup><article  id="comenzar-un-libro-de-bookdown">
+
+<ul>
+<li>El archivo inicial es index.Rmd</li>
+<li>Agregamos archivos adicionales Rmd que son los capítulos (se procesan en orden alfabético, pero esto puede cambiarse)</li>
+<li>Construimos el libro:</li>
 </ul>
 
-<!--- ver primero un demo general, y luego parte por parte
-enseñar aprendizaje máquina, y luego interactivos del
-curso de métodos analíticos --->
+<pre >bookdown::render_book(&quot;index.Rmd&quot;, &quot;bookdown::gitbook&quot;)</pre>
 
-<!--- Ahora explicar los básicos de markdown --->
+</article></slide><slide class=""><hgroup><h2>Más configuración</h2></hgroup><article  id="mas-configuracion">
 
-<!-- hacer uno rápido -->
+<p>Podemos agregar (en index.Rmd) (botón build de Rstudio):</p>
 
-<!-- de los primeros, hacer a mano en línea de comandos 
-bookdown::render_book("index.Rmd", "bookdown::gitbook")
-
-Agregar:
-site: bookdown::bookdown_site
+<pre >site: bookdown::bookdown_site
 output:
   bookdown::gitbook: default
+  #bookdown::pdf_book: default</pre>
 
-y también:
+<p>Y cambiamos algunas opciones, por ejemplo:</p>
 
+<pre >site: bookdown::bookdown_site
+output:
   bookdown::gitbook: 
     config:
-      sharing: no  
-  
--->
+      sharing: no  </pre>
 
-</article></slide><slide class=""><hgroup><h2>_bookdown.yaml</h2></hgroup><article  id="bookdown.yaml">
+</article></slide><slide class=""><hgroup><h2>_bookdown.yml</h2></hgroup><article  id="bookdown.yml">
 
-<p>Aquí podemos configurar más aspectos en este archivo:</p>
+<p>Aquí podemos configurar más aspectos de cómo correr los Rmd y lenguaje:</p>
 
 <pre >before_chapter_script: [&quot;script1.R&quot;, &quot;script2.R&quot;]
 after_chapter_script: &quot;script3.R&quot;
@@ -3191,29 +3195,54 @@ language:
     chapter_name: &quot;Clase &quot;
 new_session: yes</pre>
 
+</article></slide><slide class=""><hgroup><h2>_output.yml</h2></hgroup><article  id="output.yml">
+
+<p>Configuración de las salidas. Un ejemplo es:</p>
+
+<pre >bookdown::gitbook:
+  css: style.css
+  config:
+    edit: https://github.com/felipegonzalez/notas-ejemplo/edit/master/%s
+    download: [&quot;pdf&quot;, &quot;epub&quot;]
+bookdown::pdf_book:
+  includes:
+    in_header: preamble.tex
+  latex_engine: xelatex
+  citation_package: natbib
+  keep_tex: yes
+bookdown::epub_book: default</pre>
+
+</article></slide><slide class=""><hgroup><h2>Distribución manual</h2></hgroup><article  id="distribucion-manual">
+
+<p>Por ejemplo, en algún servicio como netlify</p>
+
 </article></slide><slide class=""><hgroup><h2>Referencias cruzadas</h2></hgroup><article  id="referencias-cruzadas">
 
 <ul>
-<li><p>Para matemáticas: (#eq:label) para etiquetar y @ref(eq:label) para referir</p></li>
-<li><p>Para tablas: la manera más simple es usar knitr::kable, si el chunk se llama mi-tabla, entonces la referencia es @ref(tab:mi-tabla)</p></li>
-<li><p>Para figuras: si usamos la opción fig.cap = &ldquo;Descripción&rdquo; en el chunk con nombre label, nos referimos con @ref(fig:label). Usar también fig.align = &ldquo;center&rdquo; es útil</p></li>
-<li><p>Para secciones: usar también @ref(label) donde label es el identificador de la sección (se puede usar {#label} después del nombre de la sección para escoger la etiqueta).</p></li>
-<li><p>Interactivos se pueden etiquetar como gráficas.</p></li>
+<li><p>Para matemáticas: <code>(\#eq:label)</code> para etiquetar y <code>\@ref(eq:label)</code> para referir</p></li>
+<li><p>Para tablas: la manera más simple es usar <code>knitr::kable</code> (con argumento <code>caption</code>). Si el chunk se llama <code>mi-tabla</code>, entonces la referencia es <code>\@ref(tab:mi-tabla)</code></p></li>
+<li><p>Para figuras: si usamos la opción <code>fig.cap</code> = &ldquo;Descripción&rdquo; en el chunk con nombre <code>label</code>, nos referimos con <code>\@ref(fig:label)</code>. Usar también <code>fig.align = &quot;center&quot;</code> es útil</p></li>
+<li><p>Para secciones: usar también <code>\@ref(label)</code> donde <code>label</code> es el identificador de la sección (se puede usar <code>{#label}</code> después del nombre de la sección para escoger la etiqueta).</p></li>
+<li><p>Interactivos se pueden etiquetar como figuras.</p></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Referencias</h2></hgroup><article  id="referencias">
 
-<p>Usar un archivo book.bib (referencias tipo bibtex), añadir al yaml del primer archivo</p>
+<p>Usar un archivo <code>book.bib</code> (referencias tipo bibtex), añadir al yaml del primer archivo (<code>index.Rmd</code>)</p>
 
 <pre >bibliography: [&quot;book.bib&quot;]
 link-citations: true</pre>
 
 <p>y referir con <span class="cite">[@label]</span></p>
 
+<p>Para cambiar el título de las referencias (por default &ldquo;References&rdquo;), se puede agregar un capítulo al final con el contenido:</p>
+
+<pre >`r if (knitr::is_html_output()) &#39;# Referencias {-}&#39;`</pre>
+
 </article></slide><slide class=""><hgroup><h2>Algo de automatización</h2></hgroup><article  id="algo-de-automatizacion">
 
 <ul>
-<li><p>Hacer scripts build.sh y deploy.sh, por ejemplo, para construir las notas y subirlas a nuestro sitio.</p></li>
+<li><p>Hacer scripts <code>build.sh</code> y <code>deploy.sh</code>, por ejemplo, para construir las notas y subirlas a nuestro sitio.</p></li>
 <li><p>Por ejemplo, si usamos netlify, existen herramientas de línea de comandos para actualizar nuestro sitio <a href='https://www.netlify.com/docs/cli/' title=''>https://www.netlify.com/docs/cli/</a></p></li>
 </ul>
 
@@ -3224,7 +3253,7 @@ link-citations: true</pre>
 <ul>
 <li>Los estudiantes pueden ver cambios en las notas (nuevas secciones, nuevas instrucciones, correcciones, etc.)</li>
 <li>Podemos ligar a otros servicios que se encarguen de actualizar automáticamente las notas cuando subimos cambios al repositorio de código.</li>
-<li>En algunos casos, los estudiantes contribuyen correcciones a las notas!</li>
+<li>En algunos casos, los estudiantes contribuyen correcciones a las notas de manera relativamente fácil.</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Una manera de hacer esto</h2></hgroup><article  id="una-manera-de-hacer-esto">
@@ -3237,7 +3266,7 @@ link-citations: true</pre>
 <li>Agregar archivos, hacer commit y push al nuevo repositorio.</li>
 </ul>
 
-<p>Si trabajamos manualmente, podemos hacer cambios al repositorio, compilar localmente las notas y subir el contenido de _book a donde sea que estemos compartiendo.</p>
+<p>Si trabajamos manualmente, podemos hacer cambios al repositorio, compilar localmente las notas y subir el contenido de <code>_book</code> a donde sea que estemos compartiendo.</p>
 
 </article></slide><slide class=""><hgroup><h2>Travis CI y Github pages</h2></hgroup><article  id="travis-ci-y-github-pages">
 
@@ -3245,7 +3274,7 @@ link-citations: true</pre>
 
 <ul>
 <li><p>El soporte para R en TravisCI está diseñado principalmente para desarrollo y prueba de paquetes, pero se puede usar también para compilar y distribuir bookdown.</p></li>
-<li><p>Como en los paquetes agregamos un archivo con DESCRIPTION</p></li>
+<li><p>Como en los paquetes agregamos un archivo DESCRIPTION, que debe incluir los paquetes que usamos en nuestro código.</p></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Archivos .travis.yml, build y deploy</h2></hgroup><article  id="archivos-.travis.yml-build-y-deploy">
@@ -3270,6 +3299,20 @@ git push origin gh-pages</pre>
 <ul>
 <li><p>Para que Travis pueda subir el libro compilado, necesitamos un access token de Github (En Github, Settings-&gt;Developer settings -&gt; Personal access token). Generar el token y copiarlo</p></li>
 <li><p>En Travis, seleccionar activar nuestro repositorio. En settings agregar la variable GITHUB_PAT con el token que obtuvimos.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Ventajas y desventajas de este flujo</h2></hgroup><article  id="ventajas-y-desventajas-de-este-flujo">
+
+<ul>
+<li><p>Ventaja: después de hacer cambios, y probarlos, subimos al repositorio y todo se actualiza.</p></li>
+<li><p>Ventaja: las notas siempre se compilan en un ambiente más fijo que mi máquina local (reproducibilidad). Los estudiantes pueden replicar este flujo de trabajo con sus propios repositorios</p></li>
+<li><p>Desventaja: depende de cómo corramos las pruebas, puede ser que las notas no compilen en Travis, o que compilen con resultados diferentes a los que observamos localmente</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Otros tipos de flujo</h2></hgroup><article  id="otros-tipos-de-flujo">
+
+<ul>
+<li>En este semestre, una combinación de Docker + github + netlify. El contenedor de Docker se recomienda a los estudiantes como su ambiente de trabajo.</li>
 </ul></article></slide>
 
 
