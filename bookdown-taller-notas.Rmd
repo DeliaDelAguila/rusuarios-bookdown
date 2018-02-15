@@ -2,7 +2,7 @@
 title: "Taller de bookdown"
 subtitle: "Reunión de usuarios de R (ITAM, 2018)"
 author: "Felipe González"
-date: "2/13/2018"
+date: "15/2/2018"
 output: ioslides_presentation
 ---
 
