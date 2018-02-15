@@ -3277,9 +3277,19 @@ link-citations: true</pre>
 <li><p>Como en los paquetes agregamos un archivo DESCRIPTION, que debe incluir los paquetes que usamos en nuestro código.</p></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Archivos .travis.yml, build y deploy</h2></hgroup><article  id="archivos-.travis.yml-build-y-deploy">
+</article></slide><slide class=""><hgroup><h2>Archivos .travis.yml, _build.sh y _deploy.sh</h2></hgroup><article  id="archivos-.travis.yml-_build.sh-y-_deploy.sh">
 
-<p>Crear instrucciones para que travis pueda construir nuestro libro y ponerlo en el lugar correcto.</p>
+<p>Crear instrucciones para que travis pueda construir nuestro libro y ponerlo en el lugar correcto. Un ejemplo de <code>.travis.yml</code>:</p>
+
+<pre >language: r
+cache: packages
+
+before_script:
+  - chmod +x ./_build.sh
+  - chmod +x ./_deploy.sh
+script:
+  - ./_build.sh
+  - ./_deploy.sh</pre>
 
 </article></slide><slide class=""><hgroup><h2>Configuración gh-pages</h2></hgroup><article  id="configuracion-gh-pages">
 
@@ -3305,7 +3315,7 @@ git push origin gh-pages</pre>
 
 <ul>
 <li><p>Ventaja: después de hacer cambios, y probarlos, subimos al repositorio y todo se actualiza.</p></li>
-<li><p>Ventaja: las notas siempre se compilan en un ambiente más fijo que mi máquina local (reproducibilidad). Los estudiantes pueden replicar este flujo de trabajo con sus propios repositorios</p></li>
+<li><p>Ventaja: las notas siempre se compilan en un ambiente más controlado que mi máquina local (reproducibilidad). Los estudiantes pueden replicar este flujo de trabajo con sus propios repositorios</p></li>
 <li><p>Desventaja: depende de cómo corramos las pruebas, puede ser que las notas no compilen en Travis, o que compilen con resultados diferentes a los que observamos localmente</p></li>
 </ul>
 

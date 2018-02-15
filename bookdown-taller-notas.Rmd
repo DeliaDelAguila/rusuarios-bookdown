@@ -197,11 +197,22 @@ para compilar y distribuir bookdown.
 
 - Como en los paquetes agregamos un archivo DESCRIPTION, que debe incluir los paquetes que usamos en nuestro código.
 
-## Archivos .travis.yml, build y deploy
+## Archivos .travis.yml, _build.sh y _deploy.sh
 
 Crear instrucciones para que travis pueda construir nuestro
-libro y ponerlo en el lugar correcto.
+libro y ponerlo en el lugar correcto. Un ejemplo de `.travis.yml`:
 
+```
+language: r
+cache: packages
+
+before_script:
+  - chmod +x ./_build.sh
+  - chmod +x ./_deploy.sh
+script:
+  - ./_build.sh
+  - ./_deploy.sh
+```
 
 ## Configuración gh-pages
 
@@ -228,7 +239,7 @@ agregar la variable GITHUB_PAT con el token que obtuvimos.
 
 - Ventaja: después de hacer cambios, y probarlos, subimos al repositorio y todo se actualiza.
 
-- Ventaja: las notas siempre se compilan en un ambiente más fijo que mi máquina local (reproducibilidad). Los estudiantes pueden replicar este flujo de trabajo con sus propios repositorios
+- Ventaja: las notas siempre se compilan en un ambiente más controlado que mi máquina local (reproducibilidad). Los estudiantes pueden replicar este flujo de trabajo con sus propios repositorios
 
 - Desventaja: depende de cómo corramos las pruebas, puede ser que
 las notas no compilen en Travis, o que compilen con resultados diferentes a los que observamos localmente
